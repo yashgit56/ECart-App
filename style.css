@@ -1,0 +1,175 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  background-color: rgb(33, 37, 41);
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  color: rgb(154, 154, 154);
+  right: 0;
+  top: 0;
+  position: fixed;
+  z-index: 1000;
+}
+
+.first {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.website-name {
+  color: whitesmoke;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.list .list-item {
+  font-size: 18px;
+}
+
+.list .list-item:hover {
+  cursor: pointer;
+}
+
+.list .active {
+  color: whitesmoke;
+}
+
+.second {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.website-name {
+  font-size: 28px;
+}
+
+.cartImage {
+  width: 30px;
+  height: 30px;
+}
+
+.image-wrapper {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown {
+  position: relative;
+  width: 220px;
+}
+
+.dropdown-btn {
+  width: 100%;
+  padding: 10px 14px;
+  background: #212529;
+  color: #9a9a9a;
+  border: 1px solid #343a40;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: #212529;
+  border: 1px solid #242a40;
+  border-radius: 6px;
+  list-style: none;
+  padding: 6px 0;
+  margin: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.dropdown-content a {
+  text-decoration: none;
+  padding: 10px 14px;
+  color: #dee2e6;
+  cursor: pointer;
+}
+
+.dropdown-content a:hover {
+  background: #343a40;
+}
+
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+.main {
+  margin: 20px;
+}
+
+.products {
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.product {
+  width: 300px;
+  height: 300px;
+  border: 1px solid black;
+  border-radius: 10%;
+}
+
+.billing {
+  width: 30%;
+}
+
+.cardImage {
+  width: 100px;
+  height: 80px;
+  object-fit: contain;
+  margin: 10px;
+}
+
+.productName {
+  text-align: left;
+  padding-left: 10px;
+}
+
+.productPrice {
+  text-align: left;
+  padding: 10px;
+}
