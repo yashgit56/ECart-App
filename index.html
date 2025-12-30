@@ -11,19 +11,21 @@
       <nav class="navbar">
         <div class="first">
           <h1 class="website-name">ECart App</h1>
-          <ul class="list">
-            <li class="list-item active">All</li>
-            <li class="list-item">Fruits</li>
-            <li class="list-item">Vegetables</li>
-            <li class="list-item">Seeds</li>
-          </ul>
+          <button class="hamburger" id="hamburger">☰</button>
         </div>
-        <div class="second">
+        <ul class="list" id="nav-links">
+          <li class="list-item active">All</li>
+          <li class="list-item">Fruits</li>
+          <li class="list-item">Vegetables</li>
+          <li class="list-item">Seeds</li>
+        </ul>
+
+        <div class="second" id="nav-actions">
           <div class="dropdown">
             <button class="dropdown-btn">Sort</button>
 
             <div class="dropdown-content">
-              <a href="#">By Title</a>
+              <a href="#" class="active">By Title</a>
               <a href="#">By Price</a>
               <a href="#">By Category</a>
               <hr />
@@ -31,8 +33,26 @@
             </div>
           </div>
           <div class="image-wrapper">
-            <img src="icons/shopping-cart.png" alt="Cart" class="cartImage" />
-            <span class="badge" id="badge-count"></span>
+            <button id="cart-btn" class="cartButton">
+              <img src="icons/shopping-cart.png" alt="Cart" class="cartImage" />
+              <span class="badge" id="badge-count"></span>
+            </button>
+
+            <div id="cart-dropdown" class="cart-dropdown">
+              <h1 class="cart-title">Cart</h1>
+              <div class="empty-cart-dropdown" id="empty-cart-dropdown">
+                Cart is Empty
+              </div>
+              <div id="cart-items" class="cart-items">
+                <!-- JS will inject cart items here like billing -->
+              </div>
+
+              <!-- Net total -->
+              <div class="cart-dropdown-total" id="cart-dropdown-total">
+                <span id="cart-dropdown-total-tag">Net Total</span>
+                <span id="cart-total" class="price-value">₹0</span>
+              </div>
+            </div>
           </div>
         </div>
       </nav>
@@ -41,21 +61,20 @@
     <section class="main">
       <div class="products" id="products"></div>
       <div class="billing" id="billing">
-        <div id="empty-cart" class="empty-cart">
-          Cart is Empty
-        </div>
+        <div id="empty-cart" class="empty-cart">Cart is Empty</div>
 
         <div class="billing-items" id="billing-items">
           <!-- Billing items will be dynamically added here -->
         </div>
 
-        <hr>
         <!-- Total -->
         <div class="billing-total" id="billing-total-wrapper">
-          Total: ₹<span id="billing-total">0</span>
+          <span class="net"> Net Total </span>
+          <div class="price-box">
+            <span id="billing-total" class="price-value">₹0</span>
+          </div>
         </div>
       </div>
-
     </section>
 
     <script src="static-data.js"></script>

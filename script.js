@@ -1,6 +1,91 @@
-document.querySelector(".dropdown-btn").addEventListener("click", () => {
+document.querySelector(".dropdown-btn").addEventListener("click", (e) => {
   document.querySelector(".dropdown").classList.toggle("open");
 });
+
+document.querySelector(".cartButton").addEventListener("click", (e) => {
+  document.querySelector(".image-wrapper").classList.toggle("open");
+  renderCartDropdown();
+});
+
+const hamburger = document.getElementById("hamburger");
+const navLinks = document.getElementById("nav-links");
+const navActions = document.getElementById("nav-actions");
+
+hamburger.addEventListener("click", () => {
+  navLinks.classList.toggle("show");
+  navActions.classList.toggle("show");
+});
+
+document.querySelectorAll(".dropdown-content a").forEach((item) => {
+  item.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    document
+      .querySelectorAll(".dropdown-content a")
+      .forEach((a) => a.classList.remove("active"));
+
+    if (e.target.innerText != "Clear") {
+      e.target.classList.add("active");
+    }
+
+    const sortType = e.target.innerText.trim();
+
+    const sortingCriteria = sortType.split(" ")[1];
+
+    if (sortingCriteria === undefined) {
+      sortCart(sortType);
+    }
+
+    sortCart(sortingCriteria);
+  });
+});
+
+function sortCart(sortingCriteria) {
+  const cart = localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
+
+  if (cart.length === 0) {
+    return;
+  }
+
+  switch (sortingCriteria) {
+    case "Title":
+      cart.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+
+    case "Price":
+      cart.sort((a, b) => a.price - b.price);
+      break;
+
+    case "Category":
+      cart.sort((a, b) => a.category.localeCompare(b.category));
+      break;
+
+    case "Clear":
+      // optional: restore original order if you store it
+      cart = cart;
+      break;
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+  renderCartDropdown();
+}
+
+function formatPrice(el) {
+  const value = parseFloat(el.innerText) || 0;
+
+  el.innerText = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+// format on load
+document.querySelectorAll(".price-value").forEach(formatPrice);
 
 const products_container = document.querySelector("#products");
 
@@ -8,12 +93,14 @@ function renderProducts(items) {
   products_container.innerHTML = "";
   items.forEach((product) => {
     products_container.innerHTML += `<div class="product">
+      <div class="image-wrapper"> 
       <img src="${product.image}" class="cardImage" alt="${product.name}">
+      </div>
 
       <h3 class="productName">${product.name}</h3>
       <p class="productPrice">₹ ${product.price}</p>
 
-      <button onclick="addToCart(${product.id})">Add to cart</button>
+      <button onclick="addToCart(${product.id})" class="addToCartBtn">Add to cart</button>
     </div>`;
   });
 }
@@ -58,7 +145,6 @@ categoryLinks.forEach((link) => {
 });
 
 // cart related operations
-let cart = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   const storedCart = localStorage.getItem("cart");
@@ -74,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function saveCart(cartItems) {
-  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("cart", JSON.stringify(cartItems));
   updateCartCount();
 }
 
@@ -86,6 +172,7 @@ function updateCartCount() {
   const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   if (count > 0) {
+    badge.style.display = "inline-flex";
     badge.innerText = count;
   } else {
     badge.style.display = "none";
@@ -95,6 +182,10 @@ function updateCartCount() {
 function addToCart(productId) {
   // find product from products array
   const product = products.find((p) => p.id === productId);
+
+  const cart = localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
 
   // check if product already exists in cart
   const cartItem = cart.find((item) => item.id === productId);
@@ -109,18 +200,77 @@ function addToCart(productId) {
       name: product.name,
       price: product.price,
       image: product.image,
+      category: product.category,
       quantity: 1,
     });
   }
 
   saveCart(cart);
+  renderCartDropdown();
   renderCart();
+}
+
+function renderCartDropdown() {
+  const emptyCartDropdown = document.getElementById("empty-cart-dropdown");
+  const cartDropdownTotal = document.getElementById("cart-dropdown-total");
+  const cartItems = document.getElementById("cart-items");
+
+  const cart = localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
+
+  if (cart.length === 0) {
+    emptyCartDropdown.style.display = "block";
+    cartDropdownTotal.style.display = "none";
+    return;
+  }
+
+  emptyCartDropdown.style.display = "none";
+  cartDropdownTotal.style.display = "block";
+  cartItems.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    if (item.quantity <= 0) return;
+
+    total += item.price * item.quantity;
+
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <div class="billing-item-first">
+          <span>${index + 1}.</span>
+          <div class="billing-item-inner">
+            <div>
+              <span class="billing-item-name">${item.name} /</span>
+              <span class="billing-item-price">₹${item.price}</span>
+            </div>
+
+            <div class="qty-controls">
+              <button onclick="decrementQty(${
+                item.id
+              })" class="decrementBtn">−</button>
+              <span class="quantity">${item.quantity}</span>
+              <button onclick="incrementQty(${
+                item.id
+              })" class="incrementBtn">+</button>
+            </div>
+          </div>
+        </div>
+
+        <span class="price-value">₹${item.price * item.quantity}</span>
+      </div>
+    `;
+  });
+
+  document.getElementById("cart-total").innerText = "₹" + total;
 }
 
 function renderCart() {
   const emptyCart = document.getElementById("empty-cart");
   const billing_items = document.getElementById("billing-items");
   const billing_total = document.getElementById("billing-total-wrapper");
+  const separator = document.getElementById("separator");
   const cart = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
@@ -130,38 +280,51 @@ function renderCart() {
   if (cart.length === 0) {
     billing_items.style.display = "none";
     billing_total.style.display = "none";
+    separator.style.display = "none";
+    emptyCart.style.display = "block";
     return;
   }
 
   emptyCart.style.display = "none";
   billing_items.style.display = "block";
   billing_items.innerHTML = "";
+  billing_total.style.display = "block";
 
   let total = 0;
 
-  cart.forEach((item) => {
+  cart.forEach((item, index) => {
     if (item.quantity <= 0) return;
 
     total += item.price * item.quantity;
 
     billing_items.innerHTML += `
       <div class="billing-item">
-        <span>${item.id}</span>
-        <span>${item.name}</span>
-        <span>₹${item.price}</span>
+        <div class="billing-item-first">
+          <span>${index + 1}.</span>
+          <div class="billing-item-inner">
+            <div>
+              <span class="billing-item-name">${item.name} /</span>
+              <span class="billing-item-price">₹${item.price}</span>
+            </div>
 
-        <div class="qty-controls">
-          <button onclick="decrementQty(${item.id})">−</button>
-          <span>${item.quantity}</span>
-          <button onclick="incrementQty(${item.id})">+</button>
+            <div class="qty-controls">
+              <button onclick="decrementQty(${
+                item.id
+              })" class="decrementBtn">−</button>
+              <span class="quantity">${item.quantity}</span>
+              <button onclick="incrementQty(${
+                item.id
+              })" class="incrementBtn">+</button>
+            </div>
+          </div>
         </div>
 
-        <span>₹${item.price * item.quantity}</span>
+        <span class="price-value">₹${item.price * item.quantity}</span>
       </div>
     `;
   });
 
-  document.getElementById("billing-total").innerText = total;
+  document.getElementById("billing-total").innerText = "₹" + total;
 }
 
 function incrementQty(productId) {
@@ -176,6 +339,7 @@ function incrementQty(productId) {
 
   updateCartCount();
   renderCart();
+  renderCartDropdown();
 }
 
 function decrementQty(productId) {
@@ -195,4 +359,5 @@ function decrementQty(productId) {
 
   updateCartCount();
   renderCart();
+  renderCartDropdown();
 }
