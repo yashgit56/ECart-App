@@ -1,10 +1,19 @@
 document.querySelector(".dropdown-btn").addEventListener("click", (e) => {
   document.querySelector(".dropdown").classList.toggle("open");
+  document.querySelector(".image-wrapper").classList.remove("open");
 });
 
 document.querySelector(".cartButton").addEventListener("click", (e) => {
   document.querySelector(".image-wrapper").classList.toggle("open");
+  document.querySelector(".dropdown").classList.remove("open");
   renderCartDropdown();
+});
+
+document.addEventListener("click", (e) => {
+  const dropdown = document.querySelector(".dropdown");
+  if (!dropdown.contains(e.target)) {
+    dropdown.classList.remove("open");
+  }
 });
 
 const hamburger = document.getElementById("hamburger");
@@ -44,6 +53,16 @@ function sortCart(sortingCriteria) {
   const cart = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
+  const activeCategory = document
+    .querySelector(".list-item.active")
+    .innerText.toLowerCase();
+  const filteredCategory = normalize(activeCategory);
+  let filteredProducts = products;
+  if (filteredCategory !== "all") {
+    filteredProducts = products.filter(
+      (product) => product.category === filteredCategory
+    );
+  }
 
   if (cart.length === 0) {
     return;
@@ -52,14 +71,17 @@ function sortCart(sortingCriteria) {
   switch (sortingCriteria) {
     case "Title":
       cart.sort((a, b) => a.name.localeCompare(b.name));
+      filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
       break;
 
     case "Price":
       cart.sort((a, b) => a.price - b.price);
+      filteredProducts.sort((a, b) => a.price - b.price);
       break;
 
     case "Category":
       cart.sort((a, b) => a.category.localeCompare(b.category));
+      filteredProducts.sort((a, b) => a.category.localeCompare(b.category));
       break;
 
     case "Clear":
@@ -70,6 +92,7 @@ function sortCart(sortingCriteria) {
 
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+  renderProducts(filteredProducts);
   renderCartDropdown();
 }
 
@@ -169,10 +192,10 @@ function updateCartCount() {
   const cartItems = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
-  const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const count = cartItems.length;
 
   if (count > 0) {
-    badge.style.display = "inline-flex";
+    badge.style.display = "block";
     badge.innerText = count;
   } else {
     badge.style.display = "none";
@@ -226,7 +249,7 @@ function renderCartDropdown() {
   }
 
   emptyCartDropdown.style.display = "none";
-  cartDropdownTotal.style.display = "block";
+  cartDropdownTotal.style.display = "flex";
   cartItems.innerHTML = "";
 
   let total = 0;
@@ -288,7 +311,7 @@ function renderCart() {
   emptyCart.style.display = "none";
   billing_items.style.display = "block";
   billing_items.innerHTML = "";
-  billing_total.style.display = "block";
+  billing_total.style.display = "flex";
 
   let total = 0;
 
