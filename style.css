@@ -280,7 +280,7 @@ header {
   cursor: pointer;
 }
 
-.product .image-wrapper {
+.product .product-image-wrapper {
   height: 120px;
   display: flex;
   align-items: center;

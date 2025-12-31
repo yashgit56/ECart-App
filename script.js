@@ -121,7 +121,7 @@ function renderProducts(items) {
   products_container.innerHTML = "";
   items.forEach((product) => {
     products_container.innerHTML += `<div class="product">
-      <div class="image-wrapper"> 
+      <div class="product-image-wrapper"> 
         <img src="${product.image}" class="cardImage" alt="${product.name}">
       </div>
 
