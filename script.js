@@ -11,9 +11,14 @@ document.querySelector(".cartButton").addEventListener("click", (e) => {
 
 document.addEventListener("click", (e) => {
   const dropdown = document.querySelector(".dropdown");
+  // const cartDropdown = document.querySelector(".cart-dropdown");
+  // const image_wrapper = document.querySelector(".image-wrapper");
   if (!dropdown.contains(e.target)) {
     dropdown.classList.remove("open");
   }
+  // if (!cartDropdown.contains(e.target)) {
+  //   image_wrapper.classList.remove("open");
+  // }
 });
 
 const hamburger = document.getElementById("hamburger");
@@ -117,7 +122,7 @@ function renderProducts(items) {
   items.forEach((product) => {
     products_container.innerHTML += `<div class="product">
       <div class="image-wrapper"> 
-      <img src="${product.image}" class="cardImage" alt="${product.name}">
+        <img src="${product.image}" class="cardImage" alt="${product.name}">
       </div>
 
       <h3 class="productName">${product.name}</h3>

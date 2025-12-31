@@ -268,8 +268,6 @@ header {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  position: relative;
-  z-index: 1;
 }
 
 .product:hover {
@@ -538,5 +536,9 @@ header {
   /* keep badge positioning consistent from the main rule */
   .image-wrapper .badge {
     position: absolute;
+  }
+
+  .cart-dropdown {
+    left: 0;
   }
 }
