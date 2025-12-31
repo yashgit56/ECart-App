@@ -69,7 +69,7 @@ function sortCart(sortingCriteria) {
     );
   }
 
-  if (cart.length === 0) {
+  if (cart.length === 0 && products.length === 0) {
     return;
   }
 
@@ -95,10 +95,14 @@ function sortCart(sortingCriteria) {
       break;
   }
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-  renderProducts(filteredProducts);
-  renderCartDropdown();
+  if (cart.length > 0) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
+    renderCartDropdown();
+  }
+  if (filteredProducts.length > 0) {
+    renderProducts(filteredProducts);
+  }
 }
 
 function formatPrice(el) {
