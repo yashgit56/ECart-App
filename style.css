@@ -248,6 +248,10 @@ header {
     padding: 8px 0;
     width: 100%;
   }
+
+  .cart-dropdown {
+    left: 0;
+  }
 }
 
 .products {
@@ -536,9 +540,5 @@ header {
   /* keep badge positioning consistent from the main rule */
   .image-wrapper .badge {
     position: absolute;
-  }
-
-  .cart-dropdown {
-    left: 0;
   }
 }
