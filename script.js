@@ -295,7 +295,7 @@ function renderCartDropdown() {
     `;
   });
 
-  document.getElementById("cart-total").innerText = "₹" + total;
+  document.getElementById("cart-total").innerText = "₹" + total.toFixed(2);
 }
 
 function renderCart() {
@@ -356,7 +356,7 @@ function renderCart() {
     `;
   });
 
-  document.getElementById("billing-total").innerText = "₹" + total;
+  document.getElementById("billing-total").innerText = "₹" + total.toFixed(2);
 }
 
 function incrementQty(productId) {
