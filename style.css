@@ -55,6 +55,7 @@ header {
   align-items: center;
   justify-content: center;
   gap: 15px;
+  transition: all 0.3s ease;
 }
 
 .list .list-item {
